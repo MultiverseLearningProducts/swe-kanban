@@ -6,5 +6,4 @@ describe('Adding Users', () => {
         cy.get('.user-list button').click()
         cy.get('#modal').contains('Add User')
     })
-    it('you can add users with a name and avatar')
 })

@@ -2,7 +2,7 @@ const {Sequelize, Model, DataTypes} = require('sequelize')
 const path = require('path')
 
 const connectionSettings = {
-    test: {dialect: 'sqlite', storage: 'sqlite::memory:'},
+    test: {dialect: 'sqlite', storage: ':memory:'},
     dev: {dialect: 'sqlite', storage: path.join(__dirname, 'data.db')},
     production: {dialect: 'postgres', protocal: 'postgres'}
 }
@@ -27,8 +27,6 @@ Task.init({
 }, {sequelize})
 Board.hasMany(Task, {as: 'tasks'})
 Task.belongsTo(Board)
-User.hasMany(Task)
-Task.belongsTo(User, {as: 'user'})
 
 module.exports = {
     Board,
