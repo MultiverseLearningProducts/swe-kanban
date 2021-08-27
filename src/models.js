@@ -12,15 +12,15 @@ const sequelize = process.env.NODE_ENV === 'production'
     : new Sequelize(connectionSettings[process.env.NODE_ENV])
 
 class User extends Model {}
+class Board extends Model {}
+class Task extends Model {}
 User.init({
     name: DataTypes.STRING,
     avatar: DataTypes.STRING
 }, {sequelize})
-class Board extends Model {}
 Board.init({
     title: DataTypes.STRING
 }, {sequelize})
-class Task extends Model {}
 Task.init({
     desc: DataTypes.STRING,
     status: DataTypes.NUMBER

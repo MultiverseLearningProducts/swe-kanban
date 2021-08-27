@@ -64,7 +64,7 @@ app.post('/users', async (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
-    sequelize.sync(() => {
+    sequelize.sync().then(() => {
         console.log('Kanban app running on port', process.env.PORT)
     })
 })
