@@ -8,8 +8,7 @@
     "dev": "NODE_ENV=dev PORT=3000 nodemon server.js",
     "test": "PORT=3001 jest",
     "test:watch": "PORT=3001 jest --watchAll",
-    "test:cypress": "cypress run",
-    "test:e2e": "PORT=3001 NODE_ENV=test server-test 3001 test:cypress"
+    "test:e2e": "docker-compose up --exit-code-from cypress"
   },
   "engines": {
     "node": "14",
@@ -28,15 +27,17 @@
     "express-handlebars": "^5.1.0",
     "handlebars": "^4.5.3",
     "pg": "^8.4.1",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0",
+    "wait-for": "^2.1.1"
   },
   "devDependencies": {
+    "caniuse-lite": "^1.0.30001252",
     "chai": "^4.2.0",
     "cypress": "^5.4.0",
     "jest": "^26.4.2",
     "mocha": "^8.2.0",
     "nodemon": "^2.0.4",
-    "sqlite3": "^5.0.0",
     "start-server-and-test": "^1.13.1"
   }
 }
