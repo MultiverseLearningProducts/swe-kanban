@@ -7,8 +7,10 @@
     "start": "node server.js",
     "dev": "NODE_ENV=dev PORT=3000 nodemon server.js",
     "test": "PORT=3001 jest",
+    "start:ci": "NODE_ENV=test PORT=3001 node server.js",
     "test:watch": "PORT=3001 jest --watchAll",
-    "test:e2e": "docker-compose up --exit-code-from cypress"
+    "test:cy": "cypress run",
+    "test:e2e": "start-server-and-test start:ci http://localhost:3001 test:cy"
   },
   "engines": {
     "node": "14",
