@@ -9,7 +9,7 @@
     "test": "PORT=3001 jest",
     "start:ci": "NODE_ENV=test PORT=3001 node server.js",
     "test:watch": "PORT=3001 jest --watchAll",
-    "test:cy": "DEBUG=cypress:launcher cypress run",
+    "test:cy": "DEBUG=cypress:launcher cypress run --browser chrome",
     "test:e2e": "start-server-and-test start:ci http://localhost:3001 test:cy"
   },
   "engines": {
