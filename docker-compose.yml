@@ -16,5 +16,4 @@ services:
     working_dir: /e2e
     volumes:
       - ./:/e2e
-      - /var/run/docker.sock:/var/run/docker.sock
     command: ['wait-for', 'http://kanban:3001', '--', 'cypress', 'run']
