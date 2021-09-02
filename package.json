@@ -10,11 +10,12 @@
     "start:ci": "NODE_ENV=test PORT=3001 node server.js",
     "test:watch": "PORT=3001 jest --watchAll",
     "test:cy": "npx cypress run",
-    "test:e2e": "start-server-and-test start:ci http://localhost:3001 test:cy"
+    "test:e2e": "start-server-and-test start:ci http://localhost:3001 test:cy",
+    "test:docker": "docker-compose up --exit-code-from cypress"
   },
   "engines": {
     "node": "14",
-    "npm": "7"
+    "npm": "6"
   },
   "jest": {
     "testPathIgnorePatterns": [
