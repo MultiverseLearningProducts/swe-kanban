@@ -32,7 +32,7 @@ Board.init({
 }, {sequelize})
 Task.init({
     desc: DataTypes.STRING,
-    status: DataTypes.NUMBER
+    status: DataTypes.INTEGER
 }, {sequelize})
 Board.hasMany(Task, {as: 'tasks'})
 Task.belongsTo(Board)
