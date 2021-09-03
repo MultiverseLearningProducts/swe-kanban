@@ -4,6 +4,7 @@ const expressHandlebars = require('express-handlebars')
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 const {User, Board, Task, sequelize} = require('./src/models')
 const app = express()
+const { version } = require('./package.json')
 
 const handlebars = expressHandlebars({
     handlebars: allowInsecurePrototypeAccess(Handlebars)
@@ -20,7 +21,8 @@ app.get('/', async (req, res) => {
     const users = await User.findAll({}, {plain: true})
     res.render('landing', {
         boards: JSON.stringify(boards),
-        users: JSON.stringify(users)
+        users: JSON.stringify(users),
+        version: `v${version}`
     })
 })
 
