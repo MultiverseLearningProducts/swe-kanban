@@ -11,7 +11,8 @@
     "test:watch": "PORT=3001 jest --watchAll",
     "test:cy": "npx cypress run --browser chrome",
     "test:e2e": "start-server-and-test start:ci http://localhost:3001 test:cy",
-    "test:docker": "docker-compose up --exit-code-from cypress"
+    "test:docker": "docker-compose up --exit-code-from cypress",
+    "deploy": "heroku git:remote -a multiverse-kanban && git push heroku master"
   },
   "engines": {
     "node": "14",
