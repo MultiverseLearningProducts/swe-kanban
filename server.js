@@ -5,6 +5,7 @@ const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-acce
 const {User, Board, Task, sequelize} = require('./src/models')
 const app = express()
 const { version } = require('./package.json')
+const seed = require('./src/seed')
 
 const handlebars = expressHandlebars({
     handlebars: allowInsecurePrototypeAccess(Handlebars)
@@ -27,21 +28,19 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/boards/:id', async (req, res) => {
-    const board = await Board.findByPk(req.params.id)
-    const tasks = await Task.findAll({
-        where: {
-            boardId: board.id
-        },
-        include: [
-            {model: User, as: 'user'}
-        ]
+    const board = await Board.findByPk(req.params.id, {
+        include: {
+            model: Task,
+            include: {
+                model: User
+            }
+        }
     })
 
     const users = await User.findAll()
 
     res.render('board', {
         board: JSON.stringify(board),
-        tasks: JSON.stringify(tasks),
         users: JSON.stringify(users)
     })
 })
@@ -54,10 +53,10 @@ app.get('/boards/:board_id/tasks/:task_id/update/:status', async (req, res) => {
 
 app.post('/boards/:id/tasks', async (req, res) => {
     const board = await Board.findByPk(req.params.id)
-    const { desc, userId } = req.body
-    const task = await Task.create({desc, userId: Number(userId), status: 0})
+    const { desc, UserId } = req.body
+    const task = await Task.create({desc, UserId: Number(UserId), status: 0})
     await board.addTask(task)
-    Task.findByPk(task.id, {include: 'user'}).then(task => res.send(task))
+    Task.findByPk(task.id, {include: User}).then(task => res.send(task))
 })
 
 app.post('/users', async (req, res) => {
@@ -66,7 +65,9 @@ app.post('/users', async (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
-    sequelize.sync().then(() => {
+    sequelize.sync().then(async () => {
         console.log('Kanban app running on port', process.env.PORT)
+        const users = await User.findAll()
+        if (!users.length) seed()
     })
 })
