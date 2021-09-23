@@ -94,5 +94,4 @@ async function seed() {
         return Task.create({..._task, BoardId: projectQuarter.id, UserId: users[Math.floor(Math.random() * 4)].id})
     }))
 }
-sequelize.sync().then(seed)
 module.exports = seed
