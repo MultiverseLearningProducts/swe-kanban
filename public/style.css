@@ -13,6 +13,12 @@ h1 {
     white-space: nowrap;
     overflow: hidden;
 }
+#version {
+    position: fixed;
+    right: .5rem;
+    bottom: .5rem;
+    color: blue;
+}
 .board-card {
     width: 90%;
     height: 22rem;
@@ -33,6 +39,15 @@ h1 {
     border: solid 0px transparent;
     padding: .5rem 1rem;
     margin: 0.25rem;
+}
+button {
+    background-color: hotpink;
+    border-radius: .25rem;
+    border: 0px solid transparent;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: .5rem 3rem;
 }
 .user-pill {
     background-color: gold;
@@ -73,9 +88,20 @@ h1 {
     display: flex;
     flex-direction: column;
 }
-input, button {
+.textarea {
+    padding: 1rem;
+    resize: none;
+    margin-bottom: .5rem;
+}
+#modal form select {
+    margin: .5rem 0;
     padding: .5rem;
-    margin: .25rem;
+}
+input, button {
+    margin: .5rem 0;
+}
+aside button {
+    margin-left: .5rem;
 }
 #board {
     padding: 1rem;

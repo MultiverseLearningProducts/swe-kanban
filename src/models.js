@@ -2,9 +2,18 @@ const {Sequelize, Model, DataTypes} = require('sequelize')
 const path = require('path')
 
 const connectionSettings = {
-    test: {dialect: 'sqlite', storage: 'sqlite::memory:'},
+    test: {dialect: 'sqlite', storage: ':memory:'},
     dev: {dialect: 'sqlite', storage: path.join(__dirname, 'data.db')},
-    production: {dialect: 'postgres', protocal: 'postgres'}
+    production: {
+        dialect: 'postgres',
+        ssl: true,
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }
+    }
 }
 
 const sequelize = process.env.NODE_ENV === 'production'
@@ -12,23 +21,23 @@ const sequelize = process.env.NODE_ENV === 'production'
     : new Sequelize(connectionSettings[process.env.NODE_ENV])
 
 class User extends Model {}
+class Board extends Model {}
+class Task extends Model {}
 User.init({
     name: DataTypes.STRING,
     avatar: DataTypes.STRING
 }, {sequelize})
-class Board extends Model {}
 Board.init({
     title: DataTypes.STRING
 }, {sequelize})
-class Task extends Model {}
 Task.init({
     desc: DataTypes.STRING,
-    status: DataTypes.NUMBER
+    status: DataTypes.INTEGER
 }, {sequelize})
-Board.hasMany(Task, {as: 'tasks'})
+Board.hasMany(Task)
 Task.belongsTo(Board)
+Task.belongsTo(User)
 User.hasMany(Task)
-Task.belongsTo(User, {as: 'user'})
 
 module.exports = {
     Board,

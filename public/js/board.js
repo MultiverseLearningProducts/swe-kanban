@@ -1,7 +1,7 @@
 const viewAddTaskModal = state => state.modal ? `
-    <section id="modal" onclick="app.run('hideModal')">
+    <main id="modal" onclick="app.run('hideModal')">
         <form onclick="event.stopPropagation();" onsubmit="event.stopPropagation();app.run('addTask', this);return false;">
-            <input name="desc" placeholder="Add your task" required/>
+            <textarea class="textarea" name="desc" placeholder="Add your task" required row="5"></textarea>
             <label>assign user:</label>
             <select name="user">
                 ${state.users.map(user => {
@@ -10,20 +10,20 @@ const viewAddTaskModal = state => state.modal ? `
             </select>
             <button>Add Task</button>
         </form>
-    </section>
+    </main>
 ` : ""
 
-const viewUserPill = user => `
+const viewUserPill = User => `
     <article class="user-pill">
-        <img src="${user.avatar}" alt="${user.name}"/>
-        <span>${user.name.substring(0,11)}</span>
+        <img src="${User.avatar || '/avatars/default.jpg'}" alt="${User.name || 'unknown'}"/>
+        <span>${User.name ? User.name.substring(0,11) : 'user not assigned'}</span>
     </article>
 `
 
 const viewTask = task => `
     <article id="${task.id}" class="task" draggable="true" ondragstart="app.run('ondragstart', event);">
         <p>${task.desc}</p>
-        ${viewUserPill(task.user)}
+        ${viewUserPill(task.User || {})}
     </article>
 `
 
@@ -32,20 +32,20 @@ const view = state => `
     <section>
         <aside id="0" ondragover="event.preventDefault()" ondrop="app.run('ondrop', event)">
             <h2>todo</h2>
-            ${state.tasks
+            ${state.board.Tasks
             .filter(task => task.status === 0)
             .map(viewTask).join("")}
             <button onclick="app.run('showModal')">Add Task</button>
         </aside>
         <aside id="1" ondragover="event.preventDefault()" ondrop="app.run('ondrop', event)">
             <h2>doing</h2>
-            ${state.tasks
+            ${state.board.Tasks
                 .filter(task => task.status === 1)
                 .map(viewTask).join("")}
         </aside>
         <aside id="2" ondragover="event.preventDefault()" ondrop="app.run('ondrop', event)">
             <h2>done</h2>
-            ${state.tasks
+            ${state.board.Tasks
                 .filter(task => task.status === 2)
                 .map(viewTask).join("")}
         </aside>
@@ -58,7 +58,7 @@ const update = {
         return state
     },
     ondrop: async (state, event) => {
-        const task = state.tasks.find(task => String(task.id) === event.dataTransfer.getData('text'))
+        const task = state.board.Tasks.find(task => String(task.id) === event.dataTransfer.getData('text'))
         task.status = Number(event.target.id)
         fetch(`/boards/${state.board.id}/tasks/${task.id}/update/${task.status}`)
         return state
@@ -74,17 +74,16 @@ const update = {
     addTask: async (state, form) => {
         const data = new FormData(form)
         const desc = data.get('desc')
-        const userId = data.get('user')
+        const UserId = data.get('user')
         const task = await fetch(`/boards/${state.board.id}/tasks`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({desc, userId})
+            body: JSON.stringify({desc, status: 0, UserId, BoardId: state.board.id})
         })
         .then(res => res.json())
-        state.tasks.push(task)
-        console.log(state.tasks)
+        state.board.Tasks.push(task)
         state.modal = false
         return state
     }
